@@ -24,8 +24,9 @@ public class SecurityConfigurations {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/auth/login")
-                        .permitAll()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                        .permitAll().requestMatchers(HttpMethod.POST, "/auth/register").hasRole("USER")
+                        .anyRequest().permitAll())
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean
